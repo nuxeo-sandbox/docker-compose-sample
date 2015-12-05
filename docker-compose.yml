@@ -1,0 +1,35 @@
+redis:
+  image: redis
+  volumes:
+    - nuxeocompose:/data/
+
+postgres:
+  build: ./postgres/.
+  environment:
+    - POSTGRES_USER=nuxeo
+    - POSTGRES_PASSWORD=nuxeo
+    - PGDATA=/var/lib/postgresql/data/pgdata
+  volumes:
+    - nuxeocompose:/var/lib/postgresql/data
+
+elasticsearch:
+  image: elasticsearch:1  
+  volumes:
+    - nuxeocompose:/usr/share/elasticsearch/data
+
+nuxeo:
+  image: nuxeo/nuxeo
+  restart: always
+  ports:  
+    - "8080:8080"
+  environment:
+    - NUXEO_CLID=""
+    - NUXEO_PACKAGES="nuxeo-web-mobile nuxeo-drive nuxeo-diff nuxeo-spreadsheet nuxeo-dam nuxeo-template-rendering nuxeo-template-rendering-samples nuxeo-showcase-content"
+    - NUXEO_DATA=/data/nuxeo/data/
+    - NUXEO_LOG=/data/nuxeo/log/
+    - NUXEO_DB_TYPE=postgresql
+    - NUXEO_DB_HOST=nuxeocompose_postgres_1
+    - NUXEO_ES_HOST=nuxeocompose_elasticsearch_1    
+    - NUXEO_REDIS_HOST=nuxeocompose_redis_1    
+  volumes:
+    - nuxeocompose:/data/
