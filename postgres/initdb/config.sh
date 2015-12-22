@@ -1,7 +1,7 @@
 #!/bin/sh -x
 
 
-PGCONF="/var/lib/postgresql/data/postgresql.conf"
+PGCONF="$PGDATA/postgresql.conf"
 
 perl -p -i -e "s/^#?shared_buffers\s*=.*$/shared_buffers = 100MB/" $PGCONF
 perl -p -i -e "s/^#?max_prepared_transactions\s*=.*$/max_prepared_transactions = 32/" $PGCONF

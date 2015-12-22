@@ -1,7 +1,7 @@
 redis:
   image: redis
   volumes:
-    - nuxeocompose:/data/
+    - /data/
 
 postgres:
   build: ./postgres/.
@@ -10,12 +10,12 @@ postgres:
     - POSTGRES_PASSWORD=nuxeo
     - PGDATA=/var/lib/postgresql/data/pgdata
   volumes:
-    - nuxeocompose:/var/lib/postgresql/data
+    - /var/lib/postgresql/data
 
 elasticsearch:
   image: elasticsearch:1  
   volumes:
-    - nuxeocompose:/usr/share/elasticsearch/data
+    - /usr/share/elasticsearch/data
 
 nuxeo:
   image: nuxeo/nuxeo
@@ -23,8 +23,10 @@ nuxeo:
   ports:  
     - "8080:8080"
   environment:
-    - NUXEO_CLID=""
-    - NUXEO_PACKAGES="nuxeo-web-mobile nuxeo-drive nuxeo-diff nuxeo-spreadsheet nuxeo-dam nuxeo-template-rendering nuxeo-template-rendering-samples nuxeo-showcase-content"
+    # The clid is generated after having logged to NOS and can be found
+    # in $NUXEO_HOME/nxserver/data/instance.clid
+    - NUXEO_CLID=avalid\nclid
+    - NUXEO_PACKAGES=nuxeo-web-mobile nuxeo-drive nuxeo-diff nuxeo-spreadsheet nuxeo-dam nuxeo-template-rendering nuxeo-template-rendering-samples nuxeo-showcase-content
     - NUXEO_DATA=/data/nuxeo/data/
     - NUXEO_LOG=/data/nuxeo/log/
     - NUXEO_DB_TYPE=postgresql
@@ -32,4 +34,4 @@ nuxeo:
     - NUXEO_ES_HOST=nuxeocompose_elasticsearch_1    
     - NUXEO_REDIS_HOST=nuxeocompose_redis_1    
   volumes:
-    - nuxeocompose:/data/
+    - /data/
